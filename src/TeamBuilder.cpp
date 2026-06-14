@@ -11,7 +11,7 @@ Team TeamBuilder::createNacional() {
         .build_up = BuildUpStyle::LONG_BALL,
         .atk_transition = TransitionStyle::FAST_BREAK,
         .def_transition = TransitionStyle::IMMEDIATE_PRESS,
-        .defensive_line = 0.8f,
+        .defensive_line = 0.67f,
         .width = 0.4f
     };
     
@@ -51,7 +51,7 @@ Team TeamBuilder::createNacional() {
             .reflexes_gk=10, .positioning_gk=10, .handling_gk=10, .aerial_gk=10
         }, 1},
         
-        {"Christian Dos Santos [MC_D]", RoleId::DEFENSIVE_MIDFIELDER, PlayerAttributes{
+        {"Agustín Dos Santos [MC_D]", RoleId::DEFENSIVE_MIDFIELDER, PlayerAttributes{
             .passing=70, .first_touch=72, .dribbling=60, .shooting=55, .heading=65, 
             .crossing=55, .vision=65, .positioning=78, .anticipation=80, .composure=75, 
             .pace=75, .stamina=88, .strength=78, .tackling=82, .marking=78, 
@@ -86,7 +86,7 @@ Team TeamBuilder::createNacional() {
             .reflexes_gk=10, .positioning_gk=10, .handling_gk=10, .aerial_gk=10
         }, 3},
         
-        {"Federico Martínez [EX_L]", RoleId::INSIDE_FORWARD, PlayerAttributes{
+        {"Rodrigo Martínez [EX_L]", RoleId::INSIDE_FORWARD, PlayerAttributes{
             .passing=72, .first_touch=76, .dribbling=80, .shooting=80, .heading=80, 
             .crossing=65, .vision=70, .positioning=78, .anticipation=65, .composure=78, 
             .pace=78, .stamina=75, .strength=82, .tackling=45, .marking=40, 
@@ -117,7 +117,7 @@ Team TeamBuilder::createPenarol() {
             .reflexes_gk=84, .positioning_gk=80, .handling_gk=75, .aerial_gk=78
         }, 0},
         
-        {"Mateo Barboza [DF_R]", RoleId::OFFENSIVE_FULLBACK, PlayerAttributes{
+        {"Brian Barboza [DF_R]", RoleId::OFFENSIVE_FULLBACK, PlayerAttributes{
             .passing=70, .first_touch=72, .dribbling=75, .shooting=60, .heading=55, 
             .crossing=75, .vision=68, .positioning=70, .anticipation=68, .composure=72, 
             .pace=82, .stamina=84, .strength=65, .tackling=70, .marking=65, 
