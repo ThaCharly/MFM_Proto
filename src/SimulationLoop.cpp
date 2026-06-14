@@ -29,7 +29,7 @@ Match SimulationLoop::run(const Team& home, const Team& away, uint32_t seed, boo
         const Team& defenders = (match.state.possession == TeamId::HOME) ? away : home;
         const PlayerProfile& carrier = attackers.squad[match.state.ball_carrier_idx];
         
-        auto dist = InferenceEngine::infer(ctx, carrier, attackers.tactics);
+        auto dist = InferenceEngine::infer(ctx, carrier, attackers.tactics, match.state);
         ActionId action = Sampler::sample(dist);
         
         // FASE 4: Resolver la física del duelo
