@@ -24,6 +24,7 @@ set(SOURCES
     src/StatsTracker.cpp
     src/Logger.cpp
     src/SimulationLoop.cpp
+    src/TeamBuilder.cpp
     src/main.cpp
 )
 
