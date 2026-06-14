@@ -1,4 +1,5 @@
 #include "mfm/ContextExtractor.hpp"
+#include "mfm/Weights.hpp"
 
 namespace mfm {
 
@@ -32,30 +33,28 @@ Context ContextExtractor::extract(
 
     float tactical_boost = 0.0f;
 
-    if (rival_tactics.press_style == PressStyle::HIGH_PRESS)
-        tactical_boost = 0.15f;
-    else if (rival_tactics.press_style == PressStyle::GEGENPRESSING)
-        tactical_boost = 0.25f;
+    if (rival_tactics.press_style == PressStyle::HIGH_PRESS) tactical_boost = Weights::ctxPressHighBoost();
+    else if (rival_tactics.press_style == PressStyle::GEGENPRESSING) tactical_boost = Weights::ctxPressGegenBoost();
 
-    if (rival_tactics.defensive_line > 0.6f &&
+    if (rival_tactics.defensive_line > Weights::ctxDefLineThresh() &&
         (ctx.zone_class == ZoneClass::DEFENSIVE ||
          ctx.zone_class == ZoneClass::TRANSITION))
     {
-        tactical_boost += 0.15f;
+        tactical_boost += Weights::ctxDefLineBoost();
     }
 
     float effective_pressure = state.pressure_index + tactical_boost;
 
-    if (effective_pressure > 0.75f)
+    if (effective_pressure > Weights::ctxPressExtreme())
         ctx.pressure = PressureLevel::EXTREME;
-    else if (effective_pressure > 0.50f)
+    else if (effective_pressure > Weights::ctxPressHigh())
         ctx.pressure = PressureLevel::HIGH;
-    else if (effective_pressure > 0.25f)
+    else if (effective_pressure > Weights::ctxPressMedium())
         ctx.pressure = PressureLevel::MEDIUM;
     else
         ctx.pressure = PressureLevel::LOW;
 
-    ctx.space_available = (effective_pressure < 0.4f);
+    ctx.space_available = (effective_pressure < Weights::ctxSpaceThresh());
 
     // 3. Momento y Score
     if (state.minute > 85)

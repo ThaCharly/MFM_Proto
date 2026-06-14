@@ -1,5 +1,6 @@
 #pragma once
 #include "../ActionDist.hpp"
+#include "../Weights.hpp"
 
 namespace mfm {
 
@@ -11,13 +12,13 @@ namespace mfm {
 struct MomentumSignal {
     static void apply(ActionDist& dist, float momentum) {
         if (momentum > 0.5f) {
-            dist[A(ActionId::PASS_RISKY)] *= 1.3f;
-            dist[A(ActionId::DRIBBLE)]    *= 1.2f;
-            dist[A(ActionId::SHOOT)]      *= 1.15f;
+            dist[A(ActionId::PASS_RISKY)] *= Weights::momHighPassRisky();
+            dist[A(ActionId::DRIBBLE)]    *= Weights::momHighDribble();
+            dist[A(ActionId::SHOOT)]      *= Weights::momHighShoot();
         } else if (momentum < -0.5f) {
-            dist[A(ActionId::HOLD)]       *= 1.4f;
-            dist[A(ActionId::PASS_SAFE)]  *= 1.3f;
-            dist[A(ActionId::PASS_RISKY)] *= 0.6f;
+            dist[A(ActionId::HOLD)]       *= Weights::momLowHold();
+            dist[A(ActionId::PASS_SAFE)]  *= Weights::momLowPassSafe();
+            dist[A(ActionId::PASS_RISKY)] *= Weights::momLowPassRisky();
         }
         // [-0.5, 0.5]: momentum neutro, no interferir
     }

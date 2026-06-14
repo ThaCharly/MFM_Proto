@@ -1,6 +1,7 @@
 #pragma once
 #include "../ActionDist.hpp"
 #include "../ContextExtractor.hpp"
+#include "../Weights.hpp"
 
 namespace mfm {
 
@@ -12,15 +13,15 @@ struct PressureSignal {
     static void apply(ActionDist& dist, const Context& ctx) {
         switch (ctx.pressure) {
             case PressureLevel::EXTREME:
-                dist[A(ActionId::PASS_SAFE)]  *= 1.4f;
-                dist[A(ActionId::HOLD)]       *= 1.3f;
-                dist[A(ActionId::PASS_RISKY)] *= 0.4f;
-                dist[A(ActionId::DRIBBLE)]    *= 0.5f;
-                dist[A(ActionId::SHOOT)]      *= 0.7f; // el tiro apresurado existe pero es malo
+                dist[A(ActionId::PASS_SAFE)]  *= Weights::pressExtPassSafe();
+                dist[A(ActionId::HOLD)]       *= Weights::pressExtHold();
+                dist[A(ActionId::PASS_RISKY)] *= Weights::pressExtPassRisky();
+                dist[A(ActionId::DRIBBLE)]    *= Weights::pressExtDribble();
+                dist[A(ActionId::SHOOT)]      *= Weights::pressExtShoot(); // el tiro apresurado existe pero es malo
                 break;
             case PressureLevel::HIGH:
-                dist[A(ActionId::PASS_SAFE)]  *= 1.2f;
-                dist[A(ActionId::PASS_RISKY)] *= 0.7f;
+                dist[A(ActionId::PASS_SAFE)]  *= Weights::pressHighPassSafe();
+                dist[A(ActionId::PASS_RISKY)] *= Weights::pressHighPassRisky();
                 break;
             case PressureLevel::LOW:
             case PressureLevel::MEDIUM:

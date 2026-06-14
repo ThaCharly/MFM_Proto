@@ -1,5 +1,6 @@
 #pragma once
 #include "../ActionDist.hpp"
+#include "../Weights.hpp"
 #include <cstdint>
 
 namespace mfm {
@@ -12,13 +13,13 @@ struct ConsecutivePassesSignal {
     static void apply(ActionDist& dist, uint8_t consecutive) {
         if (consecutive >= 5) {
             // El equipo tiene ritmo y busca la puñalada
-            dist[A(ActionId::PASS_RISKY)] *= 1.4f;
-            dist[A(ActionId::SHOOT)]      *= 1.3f;
-            dist[A(ActionId::DRIBBLE)]    *= 1.2f;
-            dist[A(ActionId::PASS_SAFE)]  *= 0.8f;
+            dist[A(ActionId::PASS_RISKY)] *= Weights::cp5PassRisky();
+            dist[A(ActionId::SHOOT)]      *= Weights::cp5Shoot();
+            dist[A(ActionId::DRIBBLE)]    *= Weights::cp5Dribble();
+            dist[A(ActionId::PASS_SAFE)]  *= Weights::cp5PassSafe();
         } else if (consecutive >= 3) {
             // Empieza a abrirse el espacio, suave incremento de riesgo
-            dist[A(ActionId::PASS_RISKY)] *= 1.15f;
+            dist[A(ActionId::PASS_RISKY)] *= Weights::cp3PassRisky();
         }
         // 0-2 pases: equipo recién arranca, no modificar
     }

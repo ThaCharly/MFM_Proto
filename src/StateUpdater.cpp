@@ -57,12 +57,12 @@ void StateUpdater::applyResolution(Match& match, ActionId action, const Resoluti
     // 3. ACTUALIZACIÓN DE VARIABLES EMERGENTES (Momentum, Tensión)
     if (res.success && action <= ActionId::CROSS) {
         match.state.consecutive_passes++;
-        match.state.pressure_index = std::clamp(match.state.pressure_index + 0.05f, 0.0f, 1.0f);
-        match.state.momentum += (original_possession == TeamId::HOME) ? 0.02f : -0.02f;
+        match.state.pressure_index = std::clamp(match.state.pressure_index + Weights::pressIncSuccess(), 0.0f, 1.0f);
+        match.state.momentum += (original_possession == TeamId::HOME) ? Weights::momentumIncSuccess() : -Weights::momentumIncSuccess();
     } else if (res.new_possession != original_possession) {
         // Pérdida de pelota: se resetea la cadena
         match.state.consecutive_passes = 0;
-        match.state.pressure_index = 0.2f; 
+        match.state.pressure_index = Weights::pressResetLoss(); 
         
         // Si no fue por un gol en contra, marca transición
         if (action != ActionId::SHOOT && action != ActionId::SHOOT_LONG) {
@@ -73,8 +73,8 @@ void StateUpdater::applyResolution(Match& match, ActionId action, const Resoluti
     if (res.success && (action == ActionId::SHOOT || action == ActionId::SHOOT_LONG)) {
         // Golazo: se resetea todo a saque del medio
         match.state.consecutive_passes = 0;
-        match.state.pressure_index = 0.1f;
-        match.state.momentum = (original_possession == TeamId::HOME) ? 0.5f : -0.5f;
+        match.state.pressure_index = Weights::pressResetGoal();
+        match.state.momentum = (original_possession == TeamId::HOME) ? Weights::momentumResetGoal() : -Weights::momentumResetGoal();
         match.state.phase = GamePhase::OPEN_PLAY;
     }
 
@@ -82,10 +82,10 @@ void StateUpdater::applyResolution(Match& match, ActionId action, const Resoluti
 
     // 4. TIEMPO EMERGENTE
     // Un tiro es rapidísimo. Retener la pelota lleva tiempo. 
-    float dt = 3.0f; // Base en segundos reales por acción
-    if (action == ActionId::HOLD) dt = 6.0f;
-    else if (action == ActionId::PASS_SAFE) dt = 4.0f;
-    else if (action == ActionId::SHOOT || action == ActionId::SHOOT_LONG) dt = 2.0f;
+    float dt = Weights::timeBase(); // Base en segundos reales por acción
+    if (action == ActionId::HOLD) dt = Weights::timeHold();
+    else if (action == ActionId::PASS_SAFE) dt = Weights::timePassSafe();
+    else if (action == ActionId::SHOOT || action == ActionId::SHOOT_LONG) dt = Weights::timeShoot();
 
     advanceTime(match, dt);
     accumulateFatigue(match, dt);

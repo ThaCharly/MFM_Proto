@@ -1,6 +1,7 @@
 #pragma once
 #include "../ActionDist.hpp"
 #include "../ContextExtractor.hpp"
+#include "../Weights.hpp"
 
 namespace mfm {
 
@@ -17,23 +18,23 @@ struct ScoreUrgencySignal {
         switch (ctx.score_context) {
             case ScoreContext::LOSING_COMFORTABLE:
                 // Todo o nada. El equipo busca el milagro.
-                dist[A(ActionId::SHOOT)]      *= 2.0f;
-                dist[A(ActionId::LONG_BALL)]  *= 1.8f;
-                dist[A(ActionId::PASS_RISKY)] *= 1.6f;
-                dist[A(ActionId::HOLD)]       *= 0.3f;
-                dist[A(ActionId::PASS_SAFE)]  *= 0.5f;
+                dist[A(ActionId::SHOOT)]      *= Weights::urgLoseComfShoot();
+                dist[A(ActionId::LONG_BALL)]  *= Weights::urgLoseComfLongBall();
+                dist[A(ActionId::PASS_RISKY)] *= Weights::urgLoseComfPassRisky();
+                dist[A(ActionId::HOLD)]       *= Weights::urgLoseComfHold();
+                dist[A(ActionId::PASS_SAFE)]  *= Weights::urgLoseComfPassSafe();
                 break;
             case ScoreContext::LOSING_TIGHT:
                 // Busca el empate con más verticalidad, sin desesperarse aún.
-                dist[A(ActionId::PASS_RISKY)] *= 1.4f;
-                dist[A(ActionId::SHOOT)]      *= 1.3f;
+                dist[A(ActionId::PASS_RISKY)] *= Weights::urgLoseTightPassRisky();
+                dist[A(ActionId::SHOOT)]      *= Weights::urgLoseTightShoot();
                 break;
             case ScoreContext::WINNING_COMFORTABLE:
                 // Cerrar el partido. Circular, retener, no regalar nada.
-                dist[A(ActionId::PASS_SAFE)]  *= 1.5f;
-                dist[A(ActionId::HOLD)]       *= 1.6f;
-                dist[A(ActionId::PASS_RISKY)] *= 0.5f;
-                dist[A(ActionId::SHOOT)]      *= 0.7f;
+                dist[A(ActionId::PASS_SAFE)]  *= Weights::urgWinComfPassSafe();
+                dist[A(ActionId::HOLD)]       *= Weights::urgWinComfHold();
+                dist[A(ActionId::PASS_RISKY)] *= Weights::urgWinComfPassRisky();
+                dist[A(ActionId::SHOOT)]      *= Weights::urgWinComfShoot();
                 break;
             case ScoreContext::WINNING_TIGHT:
             case ScoreContext::LEVEL:

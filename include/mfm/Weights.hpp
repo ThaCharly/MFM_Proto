@@ -68,4 +68,78 @@ inline float fatigueMaxPenalty() { return Config::getInstance().get("FATIGUE_MAX
 inline float fatigueScale()      { return Config::getInstance().get("FATIGUE_SCALE", 150.0f); }
 inline float fatigueBaseRate()   { return Config::getInstance().get("FATIGUE_BASE_RATE", 0.04f); }
 
+// --- CONTEXT EXTRACTOR ---
+inline float ctxPressHighBoost()  { return Config::getInstance().get("CTX_PRESS_HIGH_BOOST", 0.15f); }
+inline float ctxPressGegenBoost() { return Config::getInstance().get("CTX_PRESS_GEGEN_BOOST", 0.25f); }
+inline float ctxDefLineThresh()   { return Config::getInstance().get("CTX_DEF_LINE_THRESH", 0.6f); }
+inline float ctxDefLineBoost()    { return Config::getInstance().get("CTX_DEF_LINE_BOOST", 0.15f); }
+inline float ctxPressExtreme()    { return Config::getInstance().get("CTX_PRESS_EXTREME", 0.75f); }
+inline float ctxPressHigh()       { return Config::getInstance().get("CTX_PRESS_HIGH", 0.50f); }
+inline float ctxPressMedium()     { return Config::getInstance().get("CTX_PRESS_MEDIUM", 0.25f); }
+inline float ctxSpaceThresh()     { return Config::getInstance().get("CTX_SPACE_THRESH", 0.4f); }
+
+// --- STATE UPDATER ---
+inline float timeBase()           { return Config::getInstance().get("TIME_BASE", 3.0f); }
+inline float timeHold()           { return Config::getInstance().get("TIME_HOLD", 6.0f); }
+inline float timePassSafe()       { return Config::getInstance().get("TIME_PASS_SAFE", 4.0f); }
+inline float timeShoot()          { return Config::getInstance().get("TIME_SHOOT", 2.0f); }
+inline float pressIncSuccess()    { return Config::getInstance().get("PRESS_INC_SUCCESS", 0.05f); }
+inline float momentumIncSuccess() { return Config::getInstance().get("MOMENTUM_INC_SUCCESS", 0.02f); }
+inline float pressResetLoss()     { return Config::getInstance().get("PRESS_RESET_LOSS", 0.2f); }
+inline float pressResetGoal()     { return Config::getInstance().get("PRESS_RESET_GOAL", 0.1f); }
+inline float momentumResetGoal()  { return Config::getInstance().get("MOMENTUM_RESET_GOAL", 0.5f); }
+
+// --- SEÑALES: ATTRIBUTE ---
+inline float attrVisionMult()     { return Config::getInstance().get("ATTR_VISION_MULT", 0.6f); }
+inline float attrDribbleMult()    { return Config::getInstance().get("ATTR_DRIBBLE_MULT", 0.5f); }
+inline float attrComposureMult()  { return Config::getInstance().get("ATTR_COMPOSURE_MULT", 0.3f); }
+inline float attrShootMult()      { return Config::getInstance().get("ATTR_SHOOT_MULT", 0.4f); }
+inline float attrShootLongMult()  { return Config::getInstance().get("ATTR_SHOOT_LONG_MULT", 0.3f); }
+inline float attrStrengthMult()   { return Config::getInstance().get("ATTR_STRENGTH_MULT", 0.4f); }
+
+// --- SEÑALES: CONSECUTIVE PASSES ---
+inline float cp5PassRisky()       { return Config::getInstance().get("CP_5_PASS_RISKY", 1.4f); }
+inline float cp5Shoot()           { return Config::getInstance().get("CP_5_SHOOT", 1.3f); }
+inline float cp5Dribble()         { return Config::getInstance().get("CP_5_DRIBBLE", 1.2f); }
+inline float cp5PassSafe()        { return Config::getInstance().get("CP_5_PASS_SAFE", 0.8f); }
+inline float cp3PassRisky()       { return Config::getInstance().get("CP_3_PASS_RISKY", 1.15f); }
+
+// --- SEÑALES: MOMENTUM ---
+inline float momHighPassRisky()   { return Config::getInstance().get("MOM_HIGH_PASS_RISKY", 1.3f); }
+inline float momHighDribble()     { return Config::getInstance().get("MOM_HIGH_DRIBBLE", 1.2f); }
+inline float momHighShoot()       { return Config::getInstance().get("MOM_HIGH_SHOOT", 1.15f); }
+inline float momLowHold()         { return Config::getInstance().get("MOM_LOW_HOLD", 1.4f); }
+inline float momLowPassSafe()     { return Config::getInstance().get("MOM_LOW_PASS_SAFE", 1.3f); }
+inline float momLowPassRisky()    { return Config::getInstance().get("MOM_LOW_PASS_RISKY", 0.6f); }
+
+// --- SEÑALES: PASSING LANES ---
+inline float lane0PassSafe()      { return Config::getInstance().get("LANE_0_PASS_SAFE", 0.3f); }
+inline float lane0PassRisky()     { return Config::getInstance().get("LANE_0_PASS_RISKY", 0.0f); }
+inline float lane0Hold()          { return Config::getInstance().get("LANE_0_HOLD", 2.0f); }
+inline float lane0Dribble()       { return Config::getInstance().get("LANE_0_DRIBBLE", 1.5f); }
+inline float lane1PassRisky()     { return Config::getInstance().get("LANE_1_PASS_RISKY", 0.5f); }
+inline float lane1PassSafe()      { return Config::getInstance().get("LANE_1_PASS_SAFE", 0.8f); }
+
+// --- SEÑALES: PRESSURE ---
+inline float pressExtPassSafe()   { return Config::getInstance().get("PRESS_EXT_PASS_SAFE", 1.4f); }
+inline float pressExtHold()       { return Config::getInstance().get("PRESS_EXT_HOLD", 1.3f); }
+inline float pressExtPassRisky()  { return Config::getInstance().get("PRESS_EXT_PASS_RISKY", 0.4f); }
+inline float pressExtDribble()    { return Config::getInstance().get("PRESS_EXT_DRIBBLE", 0.5f); }
+inline float pressExtShoot()      { return Config::getInstance().get("PRESS_EXT_SHOOT", 0.7f); }
+inline float pressHighPassSafe()  { return Config::getInstance().get("PRESS_HIGH_PASS_SAFE", 1.2f); }
+inline float pressHighPassRisky() { return Config::getInstance().get("PRESS_HIGH_PASS_RISKY", 0.7f); }
+
+// --- SEÑALES: SCORE URGENCY ---
+inline float urgLoseComfShoot()     { return Config::getInstance().get("URG_LOSE_COMF_SHOOT", 2.0f); }
+inline float urgLoseComfLongBall()  { return Config::getInstance().get("URG_LOSE_COMF_LONG_BALL", 1.8f); }
+inline float urgLoseComfPassRisky() { return Config::getInstance().get("URG_LOSE_COMF_PASS_RISKY", 1.6f); }
+inline float urgLoseComfHold()      { return Config::getInstance().get("URG_LOSE_COMF_HOLD", 0.3f); }
+inline float urgLoseComfPassSafe()  { return Config::getInstance().get("URG_LOSE_COMF_PASS_SAFE", 0.5f); }
+inline float urgLoseTightPassRisky(){ return Config::getInstance().get("URG_LOSE_TIGHT_PASS_RISKY", 1.4f); }
+inline float urgLoseTightShoot()    { return Config::getInstance().get("URG_LOSE_TIGHT_SHOOT", 1.3f); }
+inline float urgWinComfPassSafe()   { return Config::getInstance().get("URG_WIN_COMF_PASS_SAFE", 1.5f); }
+inline float urgWinComfHold()       { return Config::getInstance().get("URG_WIN_COMF_HOLD", 1.6f); }
+inline float urgWinComfPassRisky()  { return Config::getInstance().get("URG_WIN_COMF_PASS_RISKY", 0.5f); }
+inline float urgWinComfShoot()      { return Config::getInstance().get("URG_WIN_COMF_SHOOT", 0.7f); }
+
 } // namespace mfm::Weights
