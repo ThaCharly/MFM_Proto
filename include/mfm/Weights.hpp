@@ -142,4 +142,8 @@ inline float urgWinComfHold()       { return Config::getInstance().get("URG_WIN_
 inline float urgWinComfPassRisky()  { return Config::getInstance().get("URG_WIN_COMF_PASS_RISKY", 0.5f); }
 inline float urgWinComfShoot()      { return Config::getInstance().get("URG_WIN_COMF_SHOOT", 0.7f); }
 
+// --- RESOLUCIÓN: ESCALA DE DUELOS ---
+inline float duelBase()  { return Config::getInstance().get("DUEL_BASE", 50.0f); }
+inline float duelScale() { return Config::getInstance().get("DUEL_SCALE", 1.0f); }
+
 } // namespace mfm::Weights

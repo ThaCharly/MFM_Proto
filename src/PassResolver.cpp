@@ -49,8 +49,11 @@ ResolutionResult resolvePass(
 
         attack *= exec_mod;
 
+        float duel_advantage = attack - defense;
+
         p_success =
-            50.0f + (attack - defense);
+            Weights::duelBase() +
+            (duel_advantage * Weights::duelScale());
 
         p_success =
             std::clamp(
@@ -123,8 +126,11 @@ ResolutionResult resolvePass(
 
         attack *= exec_mod;
 
+        float duel_advantage = attack - defense;
+
         p_success =
-            50.0f + (attack - defense);
+            Weights::duelBase() +
+            (duel_advantage * Weights::duelScale());
 
         p_success =
             std::clamp(
