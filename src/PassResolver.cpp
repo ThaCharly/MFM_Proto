@@ -1,5 +1,5 @@
 #include "mfm/DuelResolvers.hpp"
-#include "mfm/Config.hpp"
+#include "mfm/Weights.hpp"
 
 namespace mfm::resolvers {
 
@@ -11,15 +11,14 @@ ResolutionResult resolvePass(const Match& match, const Team& attackers, const Te
     size_t def_idx = pickDefenderIndex(ctx.zone_class);
     const auto& defender = defenders.squad[def_idx];
 
-    auto& cfg = Config::getInstance();
     float exec_mod = getFatigueModifier(match, match.state.possession, carrier.line);
     float dice = RNG::random() * 100.0f;
     float p_success = 0.0f;
 
     if (action == ActionId::PASS_SAFE) {
-        float w_tech = cfg.get("RES_PASS_SAFE_TECH", 0.7f);
-        float w_comp = cfg.get("RES_PASS_SAFE_COMP", 0.3f);
-        float w_def  = cfg.get("RES_PASS_SAFE_DEF_POS", 0.2f);
+        float w_tech = Weights::resPassSafeTech();
+        float w_comp = Weights::resPassSafeComp();
+        float w_def  = Weights::resPassSafeDefPos();
 
         p_success = (carrier.attrs.passing * w_tech + carrier.attrs.composure * w_comp) * exec_mod;
         p_success -= (defender.attrs.positioning * w_def);
@@ -39,11 +38,11 @@ ResolutionResult resolvePass(const Match& match, const Team& attackers, const Te
         }
     } 
     else { 
-        float w_tech = cfg.get("RES_PASS_RISK_TECH", 0.4f);
-        float w_vis  = cfg.get("RES_PASS_RISK_VIS", 0.4f);
-        float w_comp = cfg.get("RES_PASS_RISK_COMP", 0.2f);
-        float w_dant = cfg.get("RES_PASS_RISK_DEF_ANT", 0.4f);
-        float w_dpos = cfg.get("RES_PASS_RISK_DEF_POS", 0.3f);
+        float w_tech = Weights::resPassRiskTech();
+        float w_vis  = Weights::resPassRiskVis();
+        float w_comp = Weights::resPassRiskComp();
+        float w_dant = Weights::resPassRiskDefAnt();
+        float w_dpos = Weights::resPassRiskDefPos();
 
         p_success = (carrier.attrs.passing * w_tech + carrier.attrs.vision * w_vis + carrier.attrs.composure * w_comp) * exec_mod;
         p_success -= (defender.attrs.anticipation * w_dant + defender.attrs.positioning * w_dpos);

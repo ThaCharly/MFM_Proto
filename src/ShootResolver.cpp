@@ -1,5 +1,5 @@
 #include "mfm/DuelResolvers.hpp"
-#include "mfm/Config.hpp"
+#include "mfm/Weights.hpp"
 
 namespace mfm::resolvers {
 
@@ -8,21 +8,20 @@ ResolutionResult resolveShoot(const Match& match, const Team& attackers, const T
     const auto& carrier = attackers.squad[match.state.ball_carrier_idx];
     const auto& gk = defenders.squad[0];
 
-    auto& cfg = Config::getInstance();
     float exec_mod = getFatigueModifier(match, match.state.possession, carrier.line);
     float dice = RNG::random() * 100.0f;
     
-    float w_tech = cfg.get("RES_SHOOT_TECH", 0.6f);
-    float w_comp = cfg.get("RES_SHOOT_COMP", 0.4f);
+    float w_tech = Weights::resShootTech();
+    float w_comp = Weights::resShootComp();
     float target_chance = (carrier.attrs.shooting * w_tech + carrier.attrs.composure * w_comp) * exec_mod;
     
     if (action == ActionId::SHOOT_LONG) {
-        target_chance *= cfg.get("RES_SHOOT_LONG_PENALTY", 0.7f); 
+        target_chance *= Weights::resShootLongPenalty(); 
     }
 
     if (dice < target_chance) {
-        float w_gref = cfg.get("RES_GK_REF", 0.6f);
-        float w_gpos = cfg.get("RES_GK_POS", 0.4f);
+        float w_gref = Weights::resGkRef();
+        float w_gpos = Weights::resGkPos();
         float save_chance = (gk.attrs.reflexes_gk * w_gref + gk.attrs.positioning_gk * w_gpos);
         float gk_dice = RNG::random() * 100.0f;
         

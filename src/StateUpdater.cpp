@@ -1,6 +1,6 @@
 #include "mfm/StateUpdater.hpp"
 #include "mfm/StatsTracker.hpp"
-#include "mfm/Config.hpp"
+#include "mfm/Weights.hpp"
 #include <algorithm>
 
 namespace mfm {
@@ -103,10 +103,8 @@ void StateUpdater::advanceTime(Match& match, float dt_seconds) {
 }
 
 void StateUpdater::accumulateFatigue(Match& match, float dt_seconds) {
-    auto& cfg = Config::getInstance();
-    
     // Tasa de fatiga base por segundo
-    float base_rate = cfg.get("FATIGUE_BASE_RATE", 0.04f);
+    float base_rate = Weights::fatigueBaseRate();
     float home_rate = base_rate;
     float away_rate = base_rate;
 

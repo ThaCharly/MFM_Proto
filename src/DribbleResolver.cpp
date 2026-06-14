@@ -1,5 +1,5 @@
 #include "mfm/DuelResolvers.hpp"
-#include "mfm/Config.hpp"
+#include "mfm/Weights.hpp"
 
 namespace mfm::resolvers {
 
@@ -9,16 +9,15 @@ ResolutionResult resolveDribble(const Match& match, const Team& attackers, const
     size_t def_idx = pickDefenderIndex(ctx.zone_class);
     const auto& defender = defenders.squad[def_idx];
 
-    auto& cfg = Config::getInstance();
     float exec_mod = getFatigueModifier(match, match.state.possession, carrier.line);
     float dice = RNG::random() * 100.0f;
     float p_success = 0.0f;
 
     if (action == ActionId::DRIBBLE) {
-        float w_tech   = cfg.get("RES_DRIBBLE_TECH", 0.6f);
-        float w_pace   = cfg.get("RES_DRIBBLE_PACE", 0.4f);
-        float w_dtack  = cfg.get("RES_DRIBBLE_DEF_TACK", 0.6f);
-        float w_dpace  = cfg.get("RES_DRIBBLE_DEF_PACE", 0.4f);
+        float w_tech   = Weights::resDribbleTech();
+        float w_pace   = Weights::resDribblePace();
+        float w_dtack  = Weights::resDribbleDefTack();
+        float w_dpace  = Weights::resDribbleDefPace();
 
         p_success = (carrier.attrs.dribbling * w_tech + carrier.attrs.pace * w_pace) * exec_mod;
         p_success -= (defender.attrs.tackling * w_dtack + defender.attrs.pace * w_dpace);
@@ -38,10 +37,10 @@ ResolutionResult resolveDribble(const Match& match, const Team& attackers, const
         }
     } 
     else if (action == ActionId::HOLD) {
-        float w_str   = cfg.get("RES_HOLD_STR", 0.7f);
-        float w_comp  = cfg.get("RES_HOLD_COMP", 0.3f);
-        float w_dstr  = cfg.get("RES_HOLD_DEF_STR", 0.5f);
-        float w_dmark = cfg.get("RES_HOLD_DEF_MARK", 0.3f);
+        float w_str   = Weights::resHoldStr();
+        float w_comp  = Weights::resHoldComp();
+        float w_dstr  = Weights::resHoldDefStr();
+        float w_dmark = Weights::resHoldDefMark();
 
         p_success = (carrier.attrs.strength * w_str + carrier.attrs.composure * w_comp) * exec_mod;
         p_success -= (defender.attrs.strength * w_dstr + defender.attrs.marking * w_dmark);

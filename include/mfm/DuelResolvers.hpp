@@ -3,7 +3,7 @@
 #include "ActionTypes.hpp"
 #include "ContextExtractor.hpp"
 #include "Random.hpp"
-#include "Config.hpp"
+#include "Weights.hpp"
 #include <string>
 #include <algorithm>
 
@@ -27,9 +27,7 @@ namespace resolvers {
     // Calcula el penalizador físico. A más fatiga, peores stats.
     inline float getFatigueModifier(const Match& match, TeamId team, int line) {
         float fatigue = (team == TeamId::HOME) ? match.state.fatigue_home[line] : match.state.fatigue_away[line];
-        float max_penalty = Config::getInstance().get("FATIGUE_MAX_PENALTY", 0.5f);
-        float scale = Config::getInstance().get("FATIGUE_SCALE", 150.0f);
-        return std::max(max_penalty, 1.0f - (fatigue / scale)); 
+        return std::max(Weights::fatigueMaxPenalty(), 1.0f - (fatigue / Weights::fatigueScale())); 
     }
 
     // Selecciona un defensor al azar basándose en la zona del campo.

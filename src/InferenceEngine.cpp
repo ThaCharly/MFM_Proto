@@ -1,56 +1,54 @@
 #include "mfm/InferenceEngine.hpp"
-#include "mfm/Config.hpp"
+#include "mfm/Weights.hpp"
 
 namespace mfm {
 
 std::array<float, static_cast<size_t>(ActionId::ACTION_COUNT)> 
 InferenceEngine::infer(const Context& ctx, const PlayerProfile& carrier, const TacticsProfile& tactics) {
-    auto& cfg = Config::getInstance();
-    
     std::array<float, static_cast<size_t>(ActionId::ACTION_COUNT)> dist{};
-    dist.fill(cfg.get("BASE_ACTION_PROB", 0.01f)); // Suavizado base dinámico
+    dist.fill(Weights::baseActionProb()); // Suavizado base dinámico
 
     // 1. Cimientos por Zona (Qué te pide la cancha)
     switch (ctx.zone_class) {
         case ZoneClass::DEFENSIVE:
-            dist[static_cast<size_t>(ActionId::PASS_SAFE)] = cfg.get("ZONE_DEF_PASS_SAFE", 0.60f);
-            dist[static_cast<size_t>(ActionId::LONG_BALL)] = cfg.get("ZONE_DEF_LONG_BALL", 0.25f);
-            dist[static_cast<size_t>(ActionId::HOLD)]      = cfg.get("ZONE_DEF_HOLD", 0.10f);
+            dist[static_cast<size_t>(ActionId::PASS_SAFE)] = Weights::zoneDefPassSafe();
+            dist[static_cast<size_t>(ActionId::LONG_BALL)] = Weights::zoneDefLongBall();
+            dist[static_cast<size_t>(ActionId::HOLD)]      = Weights::zoneDefHold();
             break;
         case ZoneClass::TRANSITION:
-            dist[static_cast<size_t>(ActionId::PASS_SAFE)]  = cfg.get("ZONE_TRANS_PASS_SAFE", 0.50f);
-            dist[static_cast<size_t>(ActionId::PASS_RISKY)] = cfg.get("ZONE_TRANS_PASS_RISKY", 0.20f);
-            dist[static_cast<size_t>(ActionId::DRIBBLE)]    = cfg.get("ZONE_TRANS_DRIBBLE", 0.15f);
+            dist[static_cast<size_t>(ActionId::PASS_SAFE)]  = Weights::zoneTransPassSafe();
+            dist[static_cast<size_t>(ActionId::PASS_RISKY)] = Weights::zoneTransPassRisky();
+            dist[static_cast<size_t>(ActionId::DRIBBLE)]    = Weights::zoneTransDribble();
             break;
         case ZoneClass::OFFENSIVE:
-            dist[static_cast<size_t>(ActionId::PASS_RISKY)] = cfg.get("ZONE_OFF_PASS_RISKY", 0.35f);
-            dist[static_cast<size_t>(ActionId::CROSS)]      = cfg.get("ZONE_OFF_CROSS", 0.20f);
-            dist[static_cast<size_t>(ActionId::DRIBBLE)]    = cfg.get("ZONE_OFF_DRIBBLE", 0.20f);
+            dist[static_cast<size_t>(ActionId::PASS_RISKY)] = Weights::zoneOffPassRisky();
+            dist[static_cast<size_t>(ActionId::CROSS)]      = Weights::zoneOffCross();
+            dist[static_cast<size_t>(ActionId::DRIBBLE)]    = Weights::zoneOffDribble();
             break;
         case ZoneClass::DANGER_AREA:
-            dist[static_cast<size_t>(ActionId::SHOOT)]      = cfg.get("ZONE_DANGER_SHOOT", 0.60f);
-            dist[static_cast<size_t>(ActionId::PASS_SAFE)]  = cfg.get("ZONE_DANGER_PASS_SAFE", 0.15f);
+            dist[static_cast<size_t>(ActionId::SHOOT)]      = Weights::zoneDangerShoot();
+            dist[static_cast<size_t>(ActionId::PASS_SAFE)]  = Weights::zoneDangerPassSafe();
             break;
     }
 
     // 2. Sesgos por Rol (La naturaleza del jugador)
     if (carrier.role == RoleId::GOALKEEPER) {
-        dist[static_cast<size_t>(ActionId::LONG_BALL)] *= cfg.get("ROLE_GK_LONG_BALL", 3.0f);
+        dist[static_cast<size_t>(ActionId::LONG_BALL)] *= Weights::roleGkLongBall();
     } else if (carrier.role == RoleId::TARGET_FORWARD) {
-        dist[static_cast<size_t>(ActionId::HOLD)]  *= cfg.get("ROLE_TARGET_MAN_HOLD", 3.5f);
+        dist[static_cast<size_t>(ActionId::HOLD)]  *= Weights::roleTargetManHold();
     }
 
     // 3. Modificadores del DT (El guion táctico)
     if (tactics.build_up == BuildUpStyle::DIRECT) {
-        dist[static_cast<size_t>(ActionId::PASS_RISKY)] *= cfg.get("TACTIC_DIRECT_PASS_RISKY", 1.6f);
+        dist[static_cast<size_t>(ActionId::PASS_RISKY)] *= Weights::tacticDirectPassRisky();
     } else if (tactics.build_up == BuildUpStyle::LONG_BALL) {
-        dist[static_cast<size_t>(ActionId::LONG_BALL)] *= cfg.get("TACTIC_LONG_LONG_BALL", 2.5f);
+        dist[static_cast<size_t>(ActionId::LONG_BALL)] *= Weights::tacticLongLongBall();
     }
 
     // 4. Modo Emergencia (El equipo recuperó la pelota recién)
     if (ctx.on_transition && tactics.atk_transition == TransitionStyle::FAST_BREAK) {
-        dist[static_cast<size_t>(ActionId::PASS_RISKY)] *= cfg.get("TRANS_FAST_PASS_RISKY", 2.0f);
-        dist[static_cast<size_t>(ActionId::DRIBBLE)]    *= cfg.get("TRANS_FAST_DRIBBLE", 1.5f);
+        dist[static_cast<size_t>(ActionId::PASS_RISKY)] *= Weights::transFastPassRisky();
+        dist[static_cast<size_t>(ActionId::DRIBBLE)]    *= Weights::transFastDribble();
     }
 
     // Apagar acciones defensivas si tenemos la posesión.
