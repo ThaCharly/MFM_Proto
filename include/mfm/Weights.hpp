@@ -146,4 +146,9 @@ inline float urgWinComfShoot()      { return Config::getInstance().get("URG_WIN_
 inline float duelBase()  { return Config::getInstance().get("DUEL_BASE", 50.0f); }
 inline float duelScale() { return Config::getInstance().get("DUEL_SCALE", 1.0f); }
 
+// --- RESOLUCIÓN: TIROS AL ARCO (PRECISIÓN) ---
+inline float resShootOnTargetScale() { return Config::getInstance().get("RES_SHOOT_ON_TARGET_SCALE", 0.75f); }
+inline float resShootOnTargetMin()   { return Config::getInstance().get("RES_SHOOT_ON_TARGET_MIN", 15.0f); }
+inline float resShootOnTargetMax()   { return Config::getInstance().get("RES_SHOOT_ON_TARGET_MAX", 90.0f); }
+
 } // namespace mfm::Weights

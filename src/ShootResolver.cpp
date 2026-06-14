@@ -23,8 +23,11 @@ ResolutionResult resolveShoot(const Match& match, const Team& attackers, const T
     }
 
     // 1. ¿Va al arco? Esto depende PURAMENTE del atacante.
-    // Un tiro decente tiene muchas chances de ir entre los 3 palos.
-    float p_target = std::clamp(attack * 0.85f, 20.0f, 95.0f); 
+    float p_target = std::clamp(
+        attack * Weights::resShootOnTargetScale(), 
+        Weights::resShootOnTargetMin(), 
+        Weights::resShootOnTargetMax()
+    ); 
 
     if (RNG::random() * 100.0f < p_target) {
         

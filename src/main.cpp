@@ -48,7 +48,7 @@ void runBatchMode(int iterations) {
 }
 
 int main() {
-    std::filesystem::path cfgPath = std::filesystem::current_path() / "weights.cfg";
+    std::filesystem::path cfgPath = std::filesystem::current_path() / ".." / "weights.cfg";;
     mfm::Config::getInstance().load(cfgPath.string());
 
     int mode = 1;

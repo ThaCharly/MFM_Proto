@@ -37,8 +37,8 @@ void StateUpdater::applyResolution(Match& match, ActionId action, const Resoluti
                 StatsTracker::recordShotOnTarget(match.stats, original_possession);
                 StatsTracker::recordGoal(match.stats, original_possession);
             } else {
-                // No fue gol. ¿Fue al arco y el golero se lució, o fue afuera?
-                if (res.new_carrier_idx == 0 && res.new_possession != original_possession) {
+                // En ShootResolver: Atajada mantiene la zona, errar la manda a DEF_C (saque de arco)
+                if (res.new_zone != ZoneId::DEF_C) {
                     StatsTracker::recordShotOnTarget(match.stats, original_possession);
                     StatsTracker::recordSave(match.stats, rival_team); 
                 } else {
